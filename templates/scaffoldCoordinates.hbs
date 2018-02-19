@@ -1,3 +1,4 @@
-<div class="container">
+<div class="container{{#if _graphic}}{{else}} no-graphic{{/if}}" style="background-image:url({{_graphic}})">
+  {{#if _graphic}}<img class="graphic" src="{{_graphic}}" />{{/if}}
   <div class="pin"></div>
 </div>

@@ -14,15 +14,35 @@ define(function(require) {
 
     render: function() {
       var template = Handlebars.templates[this.constructor.template];
-      this.$el.html(template());
+      this.$el.html(template(this.getTemplateData()));
+      _.defer(_.bind(function() {
+        this.$el.imageready(_.bind(this.postRender, this));
+      }, this));
 
       this.setValue(this.value);
 
       return this;
     },
 
+    postRender: function() {
+      var $graphic = $('.graphic', this.$el);
+      $('.container', this.$el).height($graphic.height());
+      $graphic.remove();
+    },
+
+    getTemplateData: function() {
+      var data = {};
+      var props = Origin.scaffold.getCurrentModel().get('properties');
+
+      if(props && props._graphic) {
+        data._graphic = props._graphic.src;
+      }
+      return data;
+    },
+
     setValue: function(value) {
       this.value = value;
+      $('.pin', this.$el).css({ top: value.top + '%', left: value.left + '%' });
     },
 
     getValue: function() {
